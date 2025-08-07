@@ -1,24 +1,31 @@
 #include <iostream>
 using namespace std;
 
+// Function to find the integer part of square root of n
 int integerSqrt(int n) {
+    // Edge cases: sqrt(0) = 0, sqrt(1) = 1
     if (n == 0 || n == 1)
         return n;
 
-    int start = 1, end = n, ans = 0;
+    int start = 1, end = n;
+    int ans = 0; // This will store the final answer
 
+    // Binary search loop
     while (start <= end) {
+        // To avoid overflow, use this instead of (start + end) / 2
         int mid = start + (end - start) / 2;
 
-        if (mid <= n / mid) {  // avoid overflow: use mid <= n / mid instead of mid*mid <= n
-            ans = mid;         // store the answer and move right to find a larger one
-            start = mid + 1;
-        }
-        else {
-            end = mid - 1;     // mid*mid > n → move left
+        // Check if mid is a candidate for the answer
+        // Instead of mid * mid <= n (which can overflow), we use:
+        if (mid <= n / mid) {
+            ans = mid;         // mid is valid, store it
+            start = mid + 1;   // Try to find a bigger valid answer
+        } else {
+            end = mid - 1;     // mid*mid > n, move left
         }
     }
 
+    // When the loop ends, ans holds the greatest integer such that ans*ans <= n
     return ans;
 }
 
